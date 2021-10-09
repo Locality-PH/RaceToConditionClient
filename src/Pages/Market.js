@@ -48,12 +48,12 @@ function Market() {
     });
   }
 
-  const buyItem = (itemId, itemPrice) => {
-    Axios.patch('http://localhost:3001/market/' + user_id +'/buy', {itemId: itemId, itemPrice: itemPrice, userMoney:money},
+  const buyItem = (itemId) => {
+    Axios.patch('http://localhost:3001/market/' + user_id +'/buy', {itemId: itemId, userMoney:money},
     ).then((response) => {
 
       if (response.data == false) {
-        alert("You're broke nigga");
+        alert("You don't have enough money to make this purchase!");
         return;
       }
       //console.log(response.data);
@@ -63,8 +63,8 @@ function Market() {
     });
   }
 
-  const sellItem = (itemId, itemPrice) => {
-    Axios.patch('http://localhost:3001/market/' + user_id +'/sell', {itemId: itemId, itemPrice: itemPrice, userMoney:money},
+  const sellItem = (cartId, itemId) => {
+    Axios.patch('http://localhost:3001/market/' + user_id +'/sell', {itemId: itemId, cartId: cartId},
     ).then((response) => {
       //console.log(response.data);
       getUsers();
@@ -91,7 +91,7 @@ function Market() {
             <tr key={result.id}>
               <td>{result.name}</td>
               <td>{result.price}</td>
-              <td><Button data={result.id} onClick={() => buyItem(result.id, result.price)}>Buy</Button></td>
+              <td><Button data={result.id} onClick={() => buyItem(result.id)}>Buy</Button></td>
             </tr>
             )}
           </tbody>
@@ -112,7 +112,7 @@ function Market() {
             <tr key={result.id}>
               <td>{result.name}</td>
               <td>{result.price}</td>
-              <td><Button data={result.id} onClick={() => sellItem(result.id, result.price)}>Sell</Button></td>
+              <td><Button data={result.id} onClick={() => sellItem(result.id, result.item_id)}>Sell</Button></td>
             </tr>
           );
         })}
